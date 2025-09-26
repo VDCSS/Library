@@ -1,53 +1,51 @@
 package com.example.demo.controller;
 
-import com.example.demo.exception.BookNotFoundException;
-import com.example.demo.model.Book;
-import com.example.demo.repository.BookRepository;
+import com.example.demo.dto.BookDTO;
+import com.example.demo.service.BookService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/livros")
 @CrossOrigin(origins = "http://localhost:3000")
 public class BookController {
 
-    @Autowired
-    private BookRepository repository;
+    private final BookService service;
+
+    public BookController(BookService service) {
+        this.service = service;
+    }
 
     @GetMapping
-    public List<Book> listar() {
-        return repository.findAll();
+    public Page<BookDTO> listar(Pageable pageable) {
+        return service.listar(pageable);
     }
 
-    @GetMapping("/{id}")
-    public Book buscarPorId(@PathVariable Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new BookNotFoundException(id));
-    }
-
-    @GetMapping("/search")
-    public List<Book> buscarPorFiltro(@RequestParam(required = false) String titulo,
-                                       @RequestParam(required = false) String autor,
-                                       @RequestParam(required = false) Boolean emprestado) {
-        if (titulo != null) return repository.findByTituloContainingIgnoreCase(titulo);
-        if (autor != null) return repository.findByAutorContainingIgnoreCase(autor);
-        if (emprestado != null) return repository.findByEmprestado(emprestado);
-        return repository.findAll();
+    @GetMapping("/buscar")
+    public Page<BookDTO> buscar(@RequestParam(required = false) String titulo,
+                                 @RequestParam(required = false) String autor,
+                                 @RequestParam(required = false) String emprestado,
+                                 Pageable pageable) {
+        return service.buscar(titulo, autor, emprestado, pageable);
     }
 
     @PostMapping
-    public Book cadastrar(@Valid @RequestBody Book livro) {
-        return repository.save(livro);
+    public ResponseEntity<BookDTO> cadastrar(@Valid @RequestBody BookDTO dto) {
+        BookDTO salvo = service.cadastrar(dto);
+        return ResponseEntity.ok(salvo);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<BookDTO> atualizar(@PathVariable Long id, @Valid @RequestBody BookDTO dto) {
+        return ResponseEntity.ok(service.atualizar(id, dto));
     }
 
     @DeleteMapping("/{id}")
-    public void deletar(@PathVariable Long id) {
-        if (!repository.existsById(id)) {
-            throw new BookNotFoundException(id);
-        }
-        repository.deleteById(id);
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+        service.deletar(id);
+        return ResponseEntity.noContent().build();
     }
 }

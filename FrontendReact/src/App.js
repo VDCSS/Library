@@ -1,89 +1,88 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+const API = "http://localhost:8080/livros";
+
 function App() {
   const [livros, setLivros] = useState([]);
   const [titulo, setTitulo] = useState("");
   const [autor, setAutor] = useState("");
   const [emprestado, setEmprestado] = useState(false);
   const [emprestadoPara, setEmprestadoPara] = useState("");
-  const [busca, setBusca] = useState("");
+  const [buscaTitulo, setBuscaTitulo] = useState("");
+  const [buscaAutor, setBuscaAutor] = useState("");
+  const [buscaEmprestado, setBuscaEmprestado] = useState("");
 
   const carregarLivros = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/livros");
-      setLivros(response.data);
+      const res = await axios.get(API);
+      setLivros(res.data.content || res.data);
     } catch (err) {
-      console.error("Erro ao carregar livros", err);
+      alert("Erro ao carregar livros");
     }
   };
 
-  useEffect(() => {
-    carregarLivros();
-  }, []);
+  useEffect(() => { carregarLivros(); }, []);
 
-  const cadastrarLivro = async () => {
+  const cadastrar = async () => {
+    if (emprestado && !emprestadoPara) {
+      alert("Informe para quem está emprestado");
+      return;
+    }
     try {
-      await axios.post("http://localhost:8080/livros", {
-        titulo,
-        autor,
-        emprestado,
-        emprestadoPara,
-      });
-      setTitulo("");
-      setAutor("");
-      setEmprestado(false);
-      setEmprestadoPara("");
+      await axios.post(API, { titulo, autor, emprestado, emprestadoPara });
+      setTitulo(""); setAutor(""); setEmprestado(false); setEmprestadoPara("");
       carregarLivros();
-    } catch (err) {
-      console.error("Erro ao cadastrar livro", err);
+    } catch {
+      alert("Erro ao cadastrar livro");
     }
   };
 
-  const deletarLivro = async (id) => {
-    try {
-      await axios.delete(`http://localhost:8080/livros/${id}`);
-      carregarLivros();
-    } catch (err) {
-      console.error("Erro ao deletar livro", err);
-    }
+  const deletar = async (id) => {
+    try { await axios.delete(`${API}/${id}`); carregarLivros(); }
+    catch { alert("Erro ao deletar livro"); }
   };
 
-  const buscarLivros = async () => {
+  const buscar = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/livros/search?titulo=${busca}`);
-      setLivros(response.data);
-    } catch (err) {
-      console.error("Erro ao buscar livros", err);
-    }
+      let url = `${API}/buscar?`;
+      if (buscaTitulo) url += `titulo=${buscaTitulo}&`;
+      if (buscaAutor) url += `autor=${buscaAutor}&`;
+      if (buscaEmprestado) url += `emprestado=${buscaEmprestado}&`;
+      const res = await axios.get(url);
+      setLivros(res.data.content || res.data);
+    } catch { alert("Erro na busca"); }
   };
 
   return (
     <div>
       <h1>Biblioteca</h1>
-
       <h2>Cadastrar Livro</h2>
-      <input value={titulo} onChange={(e) => setTitulo(e.target.value)} placeholder="Título" />
-      <input value={autor} onChange={(e) => setAutor(e.target.value)} placeholder="Autor" />
+      <input placeholder="Título" value={titulo} onChange={e => setTitulo(e.target.value)} />
+      <input placeholder="Autor" value={autor} onChange={e => setAutor(e.target.value)} />
       <label>
-        Emprestado:
-        <input type="checkbox" checked={emprestado} onChange={(e) => setEmprestado(e.target.checked)} />
+        Emprestado: <input type="checkbox" checked={emprestado} onChange={e=>setEmprestado(e.target.checked)} />
       </label>
-      <input value={emprestadoPara} onChange={(e) => setEmprestadoPara(e.target.value)} placeholder="Emprestado para" />
-      <button onClick={cadastrarLivro}>Cadastrar</button>
+      <input placeholder="Emprestado para" value={emprestadoPara} onChange={e=>setEmprestadoPara(e.target.value)} />
+      <button onClick={cadastrar}>Cadastrar</button>
 
-      <h2>Buscar Livro</h2>
-      <input value={busca} onChange={(e) => setBusca(e.target.value)} placeholder="Buscar por título" />
-      <button onClick={buscarLivros}>Buscar</button>
-      <button onClick={carregarLivros}>Limpar busca</button>
+      <h2>Buscar</h2>
+      <input placeholder="Título" value={buscaTitulo} onChange={e=>setBuscaTitulo(e.target.value)} />
+      <input placeholder="Autor" value={buscaAutor} onChange={e=>setBuscaAutor(e.target.value)} />
+      <select value={buscaEmprestado} onChange={e=>setBuscaEmprestado(e.target.value)}>
+        <option value="">Todos</option>
+        <option value="true">Emprestados</option>
+        <option value="false">Disponíveis</option>
+      </select>
+      <button onClick={buscar}>Buscar</button>
+      <button onClick={carregarLivros}>Limpar Busca</button>
 
       <h2>Lista de Livros</h2>
       <ul>
-        {livros.map((livro) => (
-          <li key={livro.id}>
-            {livro.titulo} - {livro.autor} - {livro.emprestado ? "Emprestado" : "Disponível"}{" "}
-            {livro.emprestadoPara && `(${livro.emprestadoPara})`}
-            <button onClick={() => deletarLivro(livro.id)}>Excluir</button>
+        {livros.map(l => (
+          <li key={l.id}>
+            {l.titulo} - {l.autor} - {l.emprestado ? `Emprestado (${l.emprestadoPara})` : "Disponível"}
+            <button onClick={()=>deletar(l.id)}>Excluir</button>
           </li>
         ))}
       </ul>

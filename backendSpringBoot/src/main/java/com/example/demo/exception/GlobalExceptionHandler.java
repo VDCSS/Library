@@ -13,17 +13,16 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(BookNotFoundException.class)
-    public ResponseEntity<Map<String, String>> handleNotFound(BookNotFoundException ex) {
-        Map<String, String> response = new HashMap<>();
-        response.put("erro", ex.getMessage());
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    public ResponseEntity<Map<String,String>> handleNotFound(BookNotFoundException ex){
+        Map<String,String> resp = new HashMap<>();
+        resp.put("erro", ex.getMessage());
+        return new ResponseEntity<>(resp, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidation(MethodArgumentNotValidException ex) {
-        Map<String, String> response = new HashMap<>();
-        ex.getBindingResult().getFieldErrors().forEach(error ->
-                response.put(error.getField(), error.getDefaultMessage()));
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<Map<String,String>> handleValidation(MethodArgumentNotValidException ex){
+        Map<String,String> resp = new HashMap<>();
+        ex.getBindingResult().getFieldErrors().forEach(err -> resp.put(err.getField(), err.getDefaultMessage()));
+        return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
     }
 }
