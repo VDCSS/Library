@@ -10,6 +10,7 @@ public class BookMapper {
                 livro.getId(),
                 livro.getTitulo(),
                 livro.getAutor(),
+                livro.getEmprestado(),
                 livro.getEmprestadoPara()
         );
     }
@@ -19,6 +20,7 @@ public class BookMapper {
         livro.setId(dto.getId());
         livro.setTitulo(dto.getTitulo());
         livro.setAutor(dto.getAutor());
+        livro.setEmprestado(dto.getEmprestado());
         livro.setEmprestadoPara(dto.getEmprestadoPara());
         return livro;
     }

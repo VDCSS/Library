@@ -12,13 +12,13 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "O título não pode estar vazio")
+    @NotBlank(message = "Título obrigatório")
     private String titulo;
 
-    @NotBlank(message = "O autor não pode estar vazio")
+    @NotBlank(message = "Autor obrigatório")
     private String autor;
 
-    @NotNull(message = "O campo emprestado deve ser informado")
+    @NotNull
     private Boolean emprestado;
 
     private String emprestadoPara;
