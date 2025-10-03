@@ -1,46 +1,16 @@
-# 📚 Biblioteca Digital
+# Biblioteca Digital
 
-Este projeto é uma **aplicação web completa** para gerenciamento de uma biblioteca digital, construída com **Spring Boot (Backend)** e **React + Vite (Frontend)**.
+Aplicação fullstack (Spring Boot + React/Vite) para gerenciar livros, autores e usuários.
 
----
+## Requisitos
+- Java (17+ recomendado; ajustar pom.xml para sua JDK)
+- Maven
+- Node.js + npm/yarn/pnpm
 
-## 🚀 Tecnologias Utilizadas
+## Como rodar
 
 ### Backend
-- Java 21
-- Spring Boot 3.x
-- Spring Security
-- Spring Data JPA (Hibernate)
-- Maven
-- H2 Database (desenvolvimento)
-
-### Frontend
-- React 18
-- Vite
-- Axios
-- Tailwind CSS
-
----
-
-## 📂 Estrutura do Projeto
-
-- **backend/** → API REST com Spring Boot  
-- **frontend/** → Interface web com React + Vite  
-- **docs/** → Documentação, checklist e sugestões  
-
----
-
-## ▶️ Como Rodar o Projeto
-
-### Clonar o repositório
 ```bash
-git clone https://github.com/seu-repo/biblioteca-digital.git
-cd biblioteca-digital
-
 cd backend
-mvn spring-boot:run
-
-cd frontend
-npm install
-npm run dev
-
+mvn clean spring-boot:run
+# ou: mvn clean install && mvn spring-boot:run
