@@ -36,3 +36,11 @@ Este projeto é uma **aplicação web completa** para gerenciamento de uma bibli
 ```bash
 git clone https://github.com/seu-repo/biblioteca-digital.git
 cd biblioteca-digital
+
+cd backend
+mvn spring-boot:run
+
+cd frontend
+npm install
+npm run dev
+
