@@ -1,18 +1,38 @@
-# Biblioteca - Projeto
+# 📚 Biblioteca Digital
 
-## Backend
-- Java 21, Spring Boot 3.x, H2 (dev), Spring Security, Lombok
-- Rodar: abrir pasta `backend` no IntelliJ e executar `BibliotecaApplication`
-- H2 console: http://localhost:8080/h2-console
+Este projeto é uma **aplicação web completa** para gerenciamento de uma biblioteca digital, construída com **Spring Boot (Backend)** e **React + Vite (Frontend)**.
 
-## Frontend
-- React + axios
-- Rodar: `cd frontend` → `npm install` → `npm start`
-- Frontend espera backend em `http://localhost:8080`
+---
 
-## Fluxos
-- Registrar usuário: POST /users (public)
-- Login: preencher usuário/senha no frontend (salva em localStorage para requests básicos)
-- Admin endpoints (POST/PUT/DELETE /livros) requer ROLE_ADMIN (HTTP Basic)
-- Solicitar empréstimo: POST /emprestimos (autenticado) com params livroId, usuarioId, retirada, devolucao
-- Public: GET /livros/disponiveis and GET /emprestimos/publicos
+## 🚀 Tecnologias Utilizadas
+
+### Backend
+- Java 21
+- Spring Boot 3.x
+- Spring Security
+- Spring Data JPA (Hibernate)
+- Maven
+- H2 Database (desenvolvimento)
+
+### Frontend
+- React 18
+- Vite
+- Axios
+- Tailwind CSS
+
+---
+
+## 📂 Estrutura do Projeto
+
+- **backend/** → API REST com Spring Boot  
+- **frontend/** → Interface web com React + Vite  
+- **docs/** → Documentação, checklist e sugestões  
+
+---
+
+## ▶️ Como Rodar o Projeto
+
+### Clonar o repositório
+```bash
+git clone https://github.com/seu-repo/biblioteca-digital.git
+cd biblioteca-digital
