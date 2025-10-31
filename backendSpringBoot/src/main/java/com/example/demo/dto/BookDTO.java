@@ -1,45 +1,76 @@
 package com.example.demo.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import java.time.LocalDate;
 
 public class BookDTO {
 
     private Long id;
-
-    @NotBlank(message = "Título obrigatório")
-    private String titulo;
-
-    @NotBlank(message = "Autor obrigatório")
-    private String autor;
-
-    @NotNull
-    private Boolean emprestado;
-
-    private String emprestadoPara;
+    private String title;
+    private String author;
+    private String genre;
+    private int quantity;
+    private LocalDate addedDate;
+    private boolean available;
 
     public BookDTO() {}
-    public BookDTO(Long id, String titulo, String autor, Boolean emprestado, String emprestadoPara) {
+
+    public BookDTO(Long id, String title, String author, String genre, int quantity, LocalDate addedDate, boolean available) {
         this.id = id;
-        this.titulo = titulo;
-        this.autor = autor;
-        this.emprestado = emprestado;
-        this.emprestadoPara = emprestadoPara;
+        this.title = title;
+        this.author = author;
+        this.genre = genre;
+        this.quantity = quantity;
+        this.addedDate = addedDate;
+        this.available = available;
     }
 
     // Getters e Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getTitulo() { return titulo; }
-    public void setTitulo(String titulo) { this.titulo = titulo; }
+    public String getTitle() {
+        return title;
+    }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-    public String getAutor() { return autor; }
-    public void setAutor(String autor) { this.autor = autor; }
+    public String getAuthor() {
+        return author;
+    }
+    public void setAuthor(String author) {
+        this.author = author;
+    }
 
-    public Boolean getEmprestado() { return emprestado; }
-    public void setEmprestado(Boolean emprestado) { this.emprestado = emprestado; }
+    public String getGenre() {
+        return genre;
+    }
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
 
-    public String getEmprestadoPara() { return emprestadoPara; }
-    public void setEmprestadoPara(String emprestadoPara) { this.emprestadoPara = emprestadoPara; }
+    public int getQuantity() {
+        return quantity;
+    }
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public LocalDate getAddedDate() {
+        return addedDate;
+    }
+    public void setAddedDate(LocalDate addedDate) {
+        this.addedDate = addedDate;
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
 }
