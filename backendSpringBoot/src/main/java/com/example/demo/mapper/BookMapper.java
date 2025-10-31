@@ -4,24 +4,29 @@ import com.example.demo.dto.BookDTO;
 import com.example.demo.model.Book;
 
 public class BookMapper {
-
-    public static BookDTO toDTO(Book livro) {
+    public static BookDTO toDTO(Book book) {
+        if (book == null) return null;
         return new BookDTO(
-                livro.getId(),
-                livro.getTitulo(),
-                livro.getAutor(),
-                livro.getEmprestado(),
-                livro.getEmprestadoPara()
+                book.getId(),
+                book.getTitle(),
+                book.getAuthor(),
+                book.getGenre(),
+                book.getQuantity(),
+                book.getAddedDate(),
+                book.isAvailable()
         );
     }
 
     public static Book toEntity(BookDTO dto) {
-        Book livro = new Book();
-        livro.setId(dto.getId());
-        livro.setTitulo(dto.getTitulo());
-        livro.setAutor(dto.getAutor());
-        livro.setEmprestado(dto.getEmprestado());
-        livro.setEmprestadoPara(dto.getEmprestadoPara());
-        return livro;
+        if (dto == null) return null;
+        return Book.builder()
+                .id(dto.getId())
+                .title(dto.getTitle())
+                .author(dto.getAuthor())
+                .genre(dto.getGenre())
+                .quantity(dto.getQuantity())
+                .addedDate(dto.getAddedDate())
+                .available(dto.isAvailable())
+                .build();
     }
 }
