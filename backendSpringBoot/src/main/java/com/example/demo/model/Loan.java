@@ -2,9 +2,10 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "loans")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,11 +16,19 @@ public class Loan {
     private Long id;
 
     @ManyToOne(optional = false)
+    @JoinColumn(name = "book_id")
     private Book book;
 
     @ManyToOne(optional = false)
-    private Student student;
+    @JoinColumn(name = "person_id")
+    private Person person;
 
-    private LocalDate loanDate = LocalDate.now();
-    private LocalDate returnDate;
+    @Column(name = "loan_date", nullable = false)
+    private LocalDateTime loanDate;
+
+    @Column(name = "return_date")
+    private LocalDateTime returnDate;
+
+    @Enumerated(EnumType.STRING)
+    private LoanStatus status = LoanStatus.ACTIVE;
 }

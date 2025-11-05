@@ -6,13 +6,14 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.library</groupId>
+    <groupId>com.example.demo</groupId>
     <artifactId>demo</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
     <name>Library System</name>
-    <description>Sistema de gerenciamento de biblioteca com Spring Boot, MapStruct, Lombok, Flyway e MySQL</description>
+    <description>Library system - backend</description>
 
+    <!-- Parent Spring Boot (gerencia versões dos starters) -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -21,68 +22,60 @@
     </parent>
 
     <properties>
+        <!-- Use Java LTS (21) para estabilidade. Se quiser Java 25, eu ajusto. -->
         <java.version>21</java.version>
-        <mapstruct.version>1.6.3.Final</mapstruct.version>
+
+        <!-- Versões explícitas para libs que não estão no BOM -->
+        <mapstruct.version>1.5.5.Final</mapstruct.version>
         <lombok.version>1.18.34</lombok.version>
         <flyway.version>10.21.0</flyway.version>
         <mysql.version>8.1.0</mysql.version>
-        <maven.compiler.source>${java.version}</maven.compiler.source>
-        <maven.compiler.target>${java.version}</maven.compiler.target>
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
-        <!-- Spring Boot -->
+        <!-- Spring Boot starters (versions managed by parent) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- JPA -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
-        <!-- Spring Validation -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
-        <!-- Spring Security -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
-        <!-- Spring Actuator -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
-        <!-- DevTools (opcional para desenvolvimento) -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <scope>runtime</scope>
-            <optional>true</optional>
-        </dependency>
-
-        <!-- Flyway (migrações de banco) -->
+        <!-- Flyway -->
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
             <version>${flyway.version}</version>
         </dependency>
 
-        <!-- MapStruct -->
+        <!-- MapStruct (stable version that exists on Maven Central) -->
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
             <version>${mapstruct.version}</version>
         </dependency>
+
+        <!-- MapStruct processor -> keep scope provided + also include in compiler annotationProcessorPaths -->
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct-processor</artifactId>
@@ -98,7 +91,7 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- MySQL -->
+        <!-- MySQL driver -->
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
@@ -106,38 +99,53 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- Logback atualizado (evita CVE) -->
+        <!-- Springdoc OpenAPI (Swagger UI e API grouping) -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.6.0</version>
+        </dependency>
+
+        <!-- Logback (you can remove it to let Spring Boot manage the version) -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>1.5.19</version>
         </dependency>
 
-        <!-- Testes -->
+        <!-- Test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>33.3.1-jre</version>
+        </dependency>
+
     </dependencies>
 
     <build>
         <plugins>
-            <!-- Compilador Java + MapStruct -->
+            <!-- Compiler plugin: important to list annotation processors explicitly -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.14.0</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                    <encoding>UTF-8</encoding>
+                    <release>${java.version}</release>
+                    <encoding>${project.build.sourceEncoding}</encoding>
                     <annotationProcessorPaths>
+                        <!-- MapStruct processor -->
                         <path>
                             <groupId>org.mapstruct</groupId>
                             <artifactId>mapstruct-processor</artifactId>
                             <version>${mapstruct.version}</version>
                         </path>
+                        <!-- Lombok -->
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
@@ -147,7 +155,7 @@
                 </configuration>
             </plugin>
 
-            <!-- Spring Boot Plugin -->
+            <!-- Spring Boot plugin -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -155,10 +163,15 @@
         </plugins>
     </build>
 
+    <!-- Força Maven Central (útil se você usa mirrors internos) -->
     <repositories>
         <repository>
             <id>central</id>
+            <name>Maven Central</name>
             <url>https://repo.maven.apache.org/maven2/</url>
+            <releases><enabled>true</enabled></releases>
+            <snapshots><enabled>false</enabled></snapshots>
         </repository>
     </repositories>
+
 </project>

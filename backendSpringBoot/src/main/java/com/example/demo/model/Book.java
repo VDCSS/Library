@@ -5,6 +5,7 @@ import lombok.*;
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "books")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,10 +15,19 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String title;
+
+    @Column(nullable = false)
     private String author;
+
     private String genre;
-    private int quantity;
-    private LocalDate addedDate;
-    private boolean available = true;
+
+    private Integer quantity = 1;
+
+    private LocalDate addedDate = LocalDate.now();
+
+    private Boolean available = true;
+
+    private Integer timesBorrowed = 0;
 }

@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.BookDTO;
-import com.example.demo.service.BookService;
+import com.example.demo.dto.PersonDTO;
+import com.example.demo.service.PersonService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,33 +9,33 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/books")
+@RequestMapping("/api/persons")
 @CrossOrigin(origins = "*")
-public class BookController {
+public class PersonController {
 
-    private final BookService service;
+    private final PersonService service;
 
-    public BookController(BookService service) {
+    public PersonController(PersonService service) {
         this.service = service;
     }
 
     @GetMapping
-    public ResponseEntity<List<BookDTO>> getAll() {
+    public ResponseEntity<List<PersonDTO>> list() {
         return ResponseEntity.ok(service.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BookDTO> getById(@PathVariable Long id) {
+    public ResponseEntity<PersonDTO> get(@PathVariable Long id) {
         return ResponseEntity.ok(service.findById(id));
     }
 
     @PostMapping
-    public ResponseEntity<BookDTO> create(@Valid @RequestBody BookDTO dto) {
+    public ResponseEntity<PersonDTO> create(@Valid @RequestBody PersonDTO dto) {
         return ResponseEntity.ok(service.create(dto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BookDTO> update(@PathVariable Long id, @Valid @RequestBody BookDTO dto) {
+    public ResponseEntity<PersonDTO> update(@PathVariable Long id, @Valid @RequestBody PersonDTO dto) {
         return ResponseEntity.ok(service.update(id, dto));
     }
 

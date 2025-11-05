@@ -1,48 +1,30 @@
 package com.example.demo.dto;
 
+import lombok.*;
+import jakarta.validation.constraints.*;
 import java.time.LocalDate;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class BookDTO {
-
     private Long id;
+
+    @NotBlank
     private String title;
+
+    @NotBlank
     private String author;
+
     private String genre;
-    private int quantity;
-    private LocalDate addedDate;
-    private boolean available;
 
-    public BookDTO() {}
+    @PositiveOrZero
+    private Integer quantity = 1;
 
-    public BookDTO(Long id, String title, String author, String genre, int quantity, LocalDate addedDate, boolean available) {
-        this.id = id;
-        this.title = title;
-        this.author = author;
-        this.genre = genre;
-        this.quantity = quantity;
-        this.addedDate = addedDate;
-        this.available = available;
-    }
+    private LocalDate addedDate = LocalDate.now();
 
-    // Getters e Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    private Boolean available = true;
 
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
-
-    public String getAuthor() { return author; }
-    public void setAuthor(String author) { this.author = author; }
-
-    public String getGenre() { return genre; }
-    public void setGenre(String genre) { this.genre = genre; }
-
-    public int getQuantity() { return quantity; }
-    public void setQuantity(int quantity) { this.quantity = quantity; }
-
-    public LocalDate getAddedDate() { return addedDate; }
-    public void setAddedDate(LocalDate addedDate) { this.addedDate = addedDate; }
-
-    public boolean isAvailable() { return available; }
-    public void setAvailable(boolean available) { this.available = available; }
+    private Integer timesBorrowed = 0;
 }
