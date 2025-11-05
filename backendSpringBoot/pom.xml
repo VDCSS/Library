@@ -6,14 +6,13 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.example</groupId>
-    <artifactId>library-system</artifactId>
+    <groupId>com.library</groupId>
+    <artifactId>demo</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
     <name>Library System</name>
-    <description>Projeto Spring Boot com Java 25, MapStruct, Lombok, Flyway e MySQL</description>
+    <description>Sistema de gerenciamento de biblioteca com Spring Boot, MapStruct, Lombok, Flyway e MySQL</description>
 
-    <!-- PARENT SPRING BOOT -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -22,7 +21,7 @@
     </parent>
 
     <properties>
-        <java.version>25</java.version>
+        <java.version>21</java.version>
         <mapstruct.version>1.6.3.Final</mapstruct.version>
         <lombok.version>1.18.34</lombok.version>
         <flyway.version>10.21.0</flyway.version>
@@ -61,6 +60,14 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <!-- DevTools (opcional para desenvolvimento) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
         </dependency>
 
         <!-- Flyway (migrações de banco) -->
