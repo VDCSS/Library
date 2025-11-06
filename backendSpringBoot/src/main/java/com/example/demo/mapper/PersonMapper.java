@@ -7,7 +7,7 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface PersonMapper {
-    @Mapping(target = "password", ignore = true) // don't map password automatically for safety when exposing DTOs
+    @Mapping(target = "password", ignore = true)
     PersonDTO toDTO(Person p);
 
     Person toEntity(PersonDTO dto);

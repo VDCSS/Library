@@ -27,7 +27,6 @@ public class OverdueChecker {
         this.publisher = publisher;
     }
 
-    // runs every 10 minutes by default (adjust in application.properties)
     @Scheduled(fixedRateString = "${scheduler.overdue-check-ms:600000}")
     @Transactional
     public void checkOverdueLoans() {
@@ -45,7 +44,7 @@ public class OverdueChecker {
             l.setStatus(LoanStatus.OVERDUE);
             loanRepo.save(l);
             logger.info("Marked loan {} as OVERDUE", l.getId());
-            publisher.publishEvent(new LoanReturnedEvent(this, l)); // re-use returned event for notification
+            publisher.publishEvent(new LoanReturnedEvent(this, l));
         }
     }
 }

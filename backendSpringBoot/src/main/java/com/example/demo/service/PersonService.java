@@ -34,7 +34,6 @@ public class PersonService {
     @Transactional
     public PersonDTO create(PersonDTO dto) {
         Person p = mapper.toEntity(dto);
-        // NOTE: password hashing should be added (BCrypt) in production
         Person saved = repo.save(p);
         return mapper.toDTO(saved);
     }

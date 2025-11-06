@@ -27,7 +27,7 @@ public class Person {
     private String username;
 
     @Column(nullable = false)
-    private String password; // store hashed in production
+    private String password;
 
     private String phone;
 }

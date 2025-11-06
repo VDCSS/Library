@@ -22,5 +22,5 @@ public class LoanDTO {
     private LocalDateTime loanDate;
     private LocalDateTime returnDate;
 
-    private String status; // values from LoanStatus.name()
+    private String status;
 }

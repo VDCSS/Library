@@ -4,7 +4,6 @@ import com.example.demo.dto.LoanDTO;
 import com.example.demo.model.Loan;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
 
 @Mapper(componentModel = "spring", uses = {BookMapper.class, PersonMapper.class})
 public interface LoanMapper {
@@ -20,6 +19,4 @@ public interface LoanMapper {
     @Mapping(source = "returnDate", target = "returnDate")
     @Mapping(source = "status", target = "status")
     LoanDTO toDTO(Loan loan);
-
-    // For toEntity we will map manually in service because we need to set associations by id
 }
