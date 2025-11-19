@@ -1,33 +1,240 @@
-body {
-  font-family: Arial, Helvetica, sans-serif;
+/* ====================================================================
+   styles.css - GitHub-like theme (light + dark) + components for Biblioteca
+   ==================================================================== */
+
+/* ---------- Theme variables (light) ---------- */
+:root{
+  --bg: #ffffff;
+  --bg-soft: #f6f8fa;
+  --surface: #ffffff;
+  --muted-surface: #f2f4f6;
+  --border: #d0d7de;
+  --text: #24292f;
+  --subtext: #57606a;
+  --accent: #0969da;
+  --accent-2: #0969da;
+  --accent-hover: #0860c4;
+  --danger: #cf222e;
+  --success: #22863a;
+  --card-shadow: rgba(9,30,66,0.04);
+  --radius: 8px;
+  --code-bg: #f6f8fa;
+  --glass: rgba(9,30,66,0.04);
+  --glass-strong: rgba(9,30,66,0.06);
+  --focus-ring: rgba(9,110,255,0.12);
+  --font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+  --max-width: 1100px;
+}
+
+/* ---------- Dark theme overrides (GitHub-like colors) ---------- */
+.dark {
+  --bg: #0d1117;
+  --bg-soft: #161b22;
+  --surface: #0d1117;
+  --muted-surface: #0f1720;
+  --border: #30363d;
+  --text: #c9d1d9;
+  --subtext: #8b949e;
+  --accent: #58a6ff;
+  --accent-2: #58a6ff;
+  --accent-hover: #79c0ff;
+  --danger: #ff7b72;
+  --success: #34d058;
+  --card-shadow: rgba(1,4,9,0.6);
+  --radius: 10px;
+  --code-bg: #0b1220;
+  --glass: rgba(255,255,255,0.02);
+  --glass-strong: rgba(255,255,255,0.03);
+  --focus-ring: rgba(88,166,255,0.12);
+}
+
+/* ---------- Global basics ---------- */
+* { box-sizing: border-box; }
+html,body,#root { height: 100%; }
+body{
   margin: 0;
-  background: #f7f7f8;
-  color: #222;
+  font-family: var(--font-family);
+  background: linear-gradient(180deg, var(--bg) 0%, var(--bg-soft) 100%);
+  color: var(--text);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  line-height: 1.45;
+  transition: background .18s ease, color .18s ease;
 }
 
-.app .container {
-  padding: 20px;
-  max-width: 900px;
-  margin: 0 auto;
+/* Container */
+.app-container {
+  max-width: var(--max-width);
+  margin: 20px auto;
+  padding: 24px;
 }
 
+/* ---------- Navbar (top fixed-ish) ---------- */
 .navbar {
-  display: flex;
-  justify-content: space-between;
-  background: #0b5ed7;
-  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 12px;
   padding: 10px 20px;
-  align-items: center;
+  background: linear-gradient(180deg, var(--surface), var(--muted-surface));
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 1px 0 var(--glass);
 }
-.navbar a { color: white; text-decoration: none; margin-right: 12px; }
-.brand a { font-weight: bold; font-size: 18px; }
 
-.auth-page { max-width: 420px; margin: 20px auto; background: white; padding: 20px; border-radius: 6px; }
-.form label { display: block; margin-bottom: 10px; }
-.form input { width: 100%; padding: 8px; margin-top: 6px; box-sizing: border-box; }
-.form button { padding: 10px 16px; margin-top: 10px; background: #0b5ed7; color: white; border: none; border-radius: 4px; cursor: pointer; }
-.error { color: #b00020; margin-top: 8px; }
+.brand {
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.brand .logo {
+  width:36px;height:36px;border-radius:7px;background:linear-gradient(180deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;color:white;font-weight:700;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.06) inset;
+}
+.brand .title { font-weight:600; font-size:16px; color:var(--text); text-decoration:none; }
 
-.book-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-top: 12px; }
-.book-card { background: white; padding: 12px; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
-.book-card button { margin-top: 8px; }
+/* Navbar links and actions */
+.nav-right { display:flex; align-items:center; gap:10px; }
+.nav-link { color:var(--subtext); text-decoration:none; padding:6px 8px; border-radius:6px; font-size:14px; }
+.nav-link:hover { color:var(--text); background:var(--glass-strong); }
+
+/* Theme toggle button */
+.theme-toggle {
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  background:transparent;
+  border:none;
+  padding:6px 8px;
+  color:var(--subtext);
+  border-radius:8px;
+  cursor:pointer;
+}
+.theme-toggle:focus { outline: none; box-shadow: 0 0 0 4px var(--focus-ring); }
+
+/* ---------- Layout: grid / header ---------- */
+.header-row {
+  display:flex;
+  gap:12px;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:18px;
+}
+
+/* Page title */
+.page-title { font-size:20px; font-weight:700; color:var(--text); margin: 0; }
+
+/* ---------- Search & Controls ---------- */
+.controls {
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+.search {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  padding:6px 10px;
+  border-radius:8px;
+}
+.search input {
+  border: none; outline:none; background:transparent; color:var(--text); width:220px;
+}
+.select {
+  border:1px solid var(--border); background:var(--surface); padding:6px 10px; border-radius:8px; color:var(--text);
+}
+
+/* ---------- Cards & Book list ---------- */
+.card {
+  background: linear-gradient(180deg,var(--surface),var(--muted-surface));
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding:12px;
+  box-shadow: 0 6px 16px var(--card-shadow);
+  transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+}
+
+.card:hover { transform: translateY(-4px); box-shadow: 0 14px 24px var(--card-shadow); }
+
+.book-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px,1fr));
+  gap: 16px;
+}
+
+/* Book card */
+.book-card { display:flex; flex-direction:column; gap:8px; height:100%; }
+.book-title { font-weight:600; font-size:15px; color:var(--text); margin:0; }
+.book-author { font-size:13px; color:var(--subtext); margin:0; }
+.book-meta { font-size:13px; color:var(--subtext); display:flex; justify-content:space-between; align-items:center; gap:8px; }
+
+/* Book actions */
+.btn {
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 12px;
+  border-radius:8px;
+  border:1px solid transparent;
+  cursor:pointer;
+  font-weight:600;
+  font-size:13px;
+}
+.btn-primary {
+  background: linear-gradient(180deg,var(--accent), var(--accent-hover));
+  color:white; border-color: transparent;
+}
+.btn-primary:disabled { opacity:0.6; cursor:not-allowed; }
+.btn-ghost { background:transparent; color:var(--text); border:1px solid var(--border); }
+
+.badge {
+  padding:4px 8px; border-radius:999px; font-size:12px; background:var(--muted-surface); color:var(--subtext); border:1px solid var(--border);
+}
+
+/* ---------- Forms inputs ---------- */
+.input {
+  display:block;
+  width:100%;
+  padding:10px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  color:var(--text);
+}
+.input:focus { outline:none; box-shadow: 0 0 0 6px var(--focus-ring); }
+
+/* ---------- Table style (for admin/report) ---------- */
+.table {
+  width:100%;
+  border-collapse:collapse;
+  background:transparent;
+  margin-top:10px;
+}
+.table th, .table td {
+  text-align:left;
+  padding:10px 12px;
+  border-bottom: 1px solid var(--border);
+  color:var(--text);
+}
+.table th { font-weight:700; font-size:13px; color:var(--subtext); }
+
+/* ---------- Small helpers ---------- */
+.row { display:flex; gap:12px; align-items:center; }
+.col { display:flex; flex-direction:column; gap:8px; }
+.muted { color:var(--subtext); font-size:13px; }
+.hint { font-size:12px; color:var(--subtext); }
+
+/* ---------- Responsive ---------- */
+@media (max-width:720px) {
+  .controls { flex-direction:column; align-items:stretch; }
+  .book-grid { grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); }
+  .nav-right { gap:6px; }
+}
+
+/* ---------- Small animation ---------- */
+.fade-in { animation: fadeIn .28s ease both; }
+@keyframes fadeIn { from { opacity:0; transform: translateY(6px);} to { opacity:1; transform: translateY(0);} }
