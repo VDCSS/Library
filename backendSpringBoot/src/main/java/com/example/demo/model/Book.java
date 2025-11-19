@@ -1,33 +1,39 @@
 package com.example.demo.model;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import lombok.*;
-import java.time.LocalDate;
 
 @Entity
-@Table(name = "books")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Book {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @NotBlank
     private String title;
 
-    @Column(nullable = false)
     private String author;
 
-    private String genre;
+    private String isbn;
 
-    private Integer quantity = 1;
+    // number of copies available
+    private Integer copies = 1;
 
-    private LocalDate addedDate = LocalDate.now();
+    // derived: if copies > 0 then available
+    public boolean isAvailable() {
+        return copies != null && copies > 0;
+    }
 
-    private Boolean available = true;
+    // optimistic locking version
+    @Version
+    private Long version;
 
     private Integer timesBorrowed = 0;
 }

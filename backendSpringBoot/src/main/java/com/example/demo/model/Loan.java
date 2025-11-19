@@ -1,33 +1,30 @@
 package com.example.demo.model;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
+import java.time.LocalDate;
 import lombok.*;
-import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "loans")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Loan {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "book_id")
-    private Book book;
-
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "person_id")
     private Person person;
 
-    @Column(name = "loan_date", nullable = false)
-    private LocalDateTime loanDate;
+    @ManyToOne(optional = false)
+    private Book book;
 
-    @Column(name = "return_date")
-    private LocalDateTime returnDate;
+    private LocalDate startDate;
+    private LocalDate dueDate;
+    private LocalDate returnedDate;
 
     @Enumerated(EnumType.STRING)
     private LoanStatus status = LoanStatus.ACTIVE;
