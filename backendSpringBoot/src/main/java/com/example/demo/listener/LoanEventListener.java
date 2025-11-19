@@ -2,10 +2,10 @@ package com.example.demo.listener;
 
 import com.example.demo.events.LoanCreatedEvent;
 import com.example.demo.events.LoanReturnedEvent;
-import com.example.demo.service.NotificationService;
 import com.example.demo.model.Book;
 import com.example.demo.model.Loan;
 import com.example.demo.repository.BookRepository;
+import com.example.demo.service.NotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;

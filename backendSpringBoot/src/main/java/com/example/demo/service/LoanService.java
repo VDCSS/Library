@@ -9,7 +9,6 @@ import com.example.demo.repository.LoanRepository;
 import com.example.demo.repository.PersonRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.dao.OptimisticLockingFailureException;
 
 import java.time.LocalDate;
 import java.util.List;

@@ -1,10 +1,10 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.PersonDTO;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.mapper.PersonMapper;
 import com.example.demo.model.Person;
 import com.example.demo.repository.PersonRepository;
-import com.example.demo.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
