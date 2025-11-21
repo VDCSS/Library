@@ -1,51 +1,53 @@
--- V1__schema_with_notifications.sql
+-- V1__init_schema.sql
+-- Create users (persons), books, loans, notifications, and roles collection table
 
-ALTER TABLE person
-  ADD COLUMN IF NOT EXISTS matricula VARCHAR(11);
+CREATE TABLE IF NOT EXISTS person (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(100) NOT NULL UNIQUE,
+  name VARCHAR(255),
+  email VARCHAR(255),
+  password VARCHAR(255),
+  matricula VARCHAR(11),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
 CREATE TABLE IF NOT EXISTS person_roles (
   person_id BIGINT NOT NULL,
   role VARCHAR(50) NOT NULL,
-  CONSTRAINT fk_person_roles_person FOREIGN KEY(person_id) REFERENCES person(id)
+  CONSTRAINT fk_person_roles_person FOREIGN KEY (person_id) REFERENCES person(id) ON DELETE CASCADE
 );
 
--- Ensure matricula unique and exactly 11 digits enforced by check
-ALTER TABLE person
-  ADD CONSTRAINT uq_person_matricula UNIQUE (matricula);
-
-ALTER TABLE person
-  ADD CONSTRAINT chk_person_matricula_length CHECK (matricula IS NULL OR char_length(matricula) = 11);
+CREATE UNIQUE INDEX IF NOT EXISTS uq_person_matricula ON person(matricula);
 
 CREATE TABLE IF NOT EXISTS book (
-  id BIGSERIAL PRIMARY KEY,
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
   title VARCHAR(512) NOT NULL,
   author VARCHAR(255),
   isbn VARCHAR(50),
-  copies INTEGER DEFAULT 1,
-  times_borrowed INTEGER DEFAULT 0,
+  total_quantity INT DEFAULT 1,
+  available_quantity INT DEFAULT 1,
+  times_borrowed INT DEFAULT 0,
   version BIGINT
 );
 
--- Loans
 CREATE TABLE IF NOT EXISTS loan (
-  id BIGSERIAL PRIMARY KEY,
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
   person_id BIGINT NOT NULL,
   book_id BIGINT NOT NULL,
-  start_time TIMESTAMP WITH TIME ZONE,
-  due_date TIMESTAMP WITH TIME ZONE,
-  returned_time TIMESTAMP WITH TIME ZONE,
+  loan_time TIMESTAMP NULL,
+  due_time TIMESTAMP NULL,
+  return_time TIMESTAMP NULL,
   status VARCHAR(20),
-  CONSTRAINT fk_loan_person FOREIGN KEY(person_id) REFERENCES person(id),
-  CONSTRAINT fk_loan_book FOREIGN KEY(book_id) REFERENCES book(id)
+  CONSTRAINT fk_loan_person FOREIGN KEY (person_id) REFERENCES person(id) ON DELETE CASCADE,
+  CONSTRAINT fk_loan_book FOREIGN KEY (book_id) REFERENCES book(id) ON DELETE CASCADE
 );
 
--- Notifications table to store messages for admin
 CREATE TABLE IF NOT EXISTS notification (
-  id BIGSERIAL PRIMARY KEY,
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
   loan_id BIGINT,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
-  type VARCHAR(30), -- e.g. 'LOAN_CREATED', 'LOAN_RETURNED'
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  type VARCHAR(50),
   message TEXT NOT NULL,
   is_read BOOLEAN DEFAULT FALSE,
-  CONSTRAINT fk_notification_loan FOREIGN KEY(loan_id) REFERENCES loan(id) ON DELETE SET NULL
+  CONSTRAINT fk_notification_loan FOREIGN KEY (loan_id) REFERENCES loan(id) ON DELETE SET NULL
 );

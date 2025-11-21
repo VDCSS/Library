@@ -1,47 +1,49 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.BookDTO;
-import com.example.demo.service.BookService;
-import jakarta.validation.Valid;
+import com.example.demo.model.Book;
+import com.example.demo.repository.BookRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/books")
-@CrossOrigin(origins = "*")
 public class BookController {
 
-    private final BookService service;
+    private final BookRepository repo;
 
-    public BookController(BookService service) {
-        this.service = service;
-    }
+    public BookController(BookRepository repo) { this.repo = repo; }
 
     @GetMapping
-    public ResponseEntity<List<BookDTO>> getAll() {
-        return ResponseEntity.ok(service.findAll());
+    public ResponseEntity<List<Book>> all() {
+        return ResponseEntity.ok(repo.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BookDTO> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(service.findById(id));
+    public ResponseEntity<Book> get(@PathVariable Long id) {
+        return ResponseEntity.ok(repo.findById(id).orElseThrow(() -> new IllegalArgumentException("Book not found")));
     }
 
     @PostMapping
-    public ResponseEntity<BookDTO> create(@Valid @RequestBody BookDTO dto) {
-        return ResponseEntity.ok(service.create(dto));
+    public ResponseEntity<Book> create(@RequestBody Book b) {
+        if (b.getAvailableQuantity() == null) b.setAvailableQuantity(b.getTotalQuantity());
+        return ResponseEntity.ok(repo.save(b));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BookDTO> update(@PathVariable Long id, @Valid @RequestBody BookDTO dto) {
-        return ResponseEntity.ok(service.update(id, dto));
+    public ResponseEntity<Book> update(@PathVariable Long id, @RequestBody Book payload) {
+        Book existing = repo.findById(id).orElseThrow(() -> new IllegalArgumentException("Book not found"));
+        existing.setTitle(payload.getTitle());
+        existing.setAuthor(payload.getAuthor());
+        existing.setIsbn(payload.getIsbn());
+        existing.setTotalQuantity(payload.getTotalQuantity());
+        existing.setAvailableQuantity(payload.getAvailableQuantity());
+        return ResponseEntity.ok(repo.save(existing));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        service.delete(id);
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        repo.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }

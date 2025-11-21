@@ -2,11 +2,8 @@ package com.example.demo.service.impl;
 
 import com.example.demo.model.Person;
 import com.example.demo.repository.PersonRepository;
+import org.springframework.security.core.userdetails.*;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.stream.Collectors;
@@ -27,10 +24,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         return User.withUsername(p.getUsername())
                 .password(p.getPassword())
                 .authorities(p.getRoles().stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList()))
-                .accountExpired(false)
-                .accountLocked(false)
-                .credentialsExpired(false)
-                .disabled(false)
+                .accountExpired(false).accountLocked(false).credentialsExpired(false).disabled(false)
                 .build();
     }
 }

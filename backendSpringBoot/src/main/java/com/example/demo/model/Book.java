@@ -1,24 +1,34 @@
 package com.example.demo.model;
 
-import javax.persistence.*;
 import lombok.*;
+import javax.persistence.*;
 
 @Entity
+@Table(name = "book")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Book {
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable=false)
+    @Column(nullable = false)
     private String title;
+
     private String author;
+
     private String isbn;
 
-    private Integer copies = 1;
+    @Column(name = "total_quantity")
+    private Integer totalQuantity = 1;
+
+    @Column(name = "available_quantity")
+    private Integer availableQuantity = 1;
+
+    @Column(name = "times_borrowed")
     private Integer timesBorrowed = 0;
 
     @Version

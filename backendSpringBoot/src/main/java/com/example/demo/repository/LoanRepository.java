@@ -1,14 +1,11 @@
 package com.example.demo.repository;
 
 import com.example.demo.model.Loan;
-import com.example.demo.model.LoanStatus;
+import com.example.demo.model.Person;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
-@Repository
-public interface LoanRepository extends JpaRepository<Loan,Long> {
+public interface LoanRepository extends JpaRepository<Loan, Long> {
     List<Loan> findByPersonId(Long personId);
-    List<Loan> findByStatus(LoanStatus status);
+    List<Loan> findByStatus(String status);
 }

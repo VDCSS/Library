@@ -1,12 +1,6 @@
 package com.example.demo.dto;
 
-import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.time.LocalDate;
+import lombok.*;
 
 @Data
 @NoArgsConstructor
@@ -14,21 +8,10 @@ import java.time.LocalDate;
 @Builder
 public class BookDTO {
     private Long id;
-
-    @NotBlank
     private String title;
-
-    @NotBlank
     private String author;
-
-    private String genre;
-
-    @PositiveOrZero
-    private Integer quantity = 1;
-
-    private LocalDate addedDate = LocalDate.now();
-
-    private Boolean available = true;
-
-    private Integer timesBorrowed = 0;
+    private String isbn;
+    private Integer totalQuantity;
+    private Integer availableQuantity;
+    private Integer timesBorrowed;
 }

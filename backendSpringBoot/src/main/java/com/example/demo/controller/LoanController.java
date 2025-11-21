@@ -1,15 +1,16 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.LoanDTO;
+import com.example.demo.dto.CreateLoanDTO;
+import com.example.demo.model.Loan;
 import com.example.demo.service.LoanService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
+import java.security.Principal;
 import java.util.List;
 
-@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/loans")
 public class LoanController {
@@ -20,47 +21,39 @@ public class LoanController {
         this.service = service;
     }
 
-    // Lista todos os empréstimos
     @GetMapping
-    public ResponseEntity<List<LoanDTO>> list() {
+    public ResponseEntity<List<Loan>> list() {
         return ResponseEntity.ok(service.findAll());
     }
 
-    // Busca por ID
     @GetMapping("/{id}")
-    public ResponseEntity<LoanDTO> get(@PathVariable Long id) {
+    public ResponseEntity<Loan> get(@PathVariable Long id) {
         return ResponseEntity.ok(service.findById(id));
     }
 
-    // Cria novo empréstimo
     @PostMapping
-    public ResponseEntity<LoanDTO> create(@Valid @RequestBody LoanDTO dto) {
-
-        // Coleta apenas os dados essenciais
-        Long bookId = dto.getBookId();
+    public ResponseEntity<?> create(@Valid @RequestBody CreateLoanDTO dto, Authentication auth) {
         Long personId = dto.getPersonId();
-        LocalDateTime loanDate = dto.getLoanDate();
-        LocalDateTime returnDate = dto.getReturnDate();
-
-        // Caso queira validação de data
-        if (loanDate == null) {
-            loanDate = LocalDateTime.now();
+        // If not provided, resolve from token username
+        if (personId == null) {
+            String username = auth.getName();
+            // find person by username
+            // We'll need PersonRepository here, but to keep controller simple we'll assume admin provides personId,
+            // or frontend will call /api/person/me to get own id and send it.
+            return ResponseEntity.badRequest().body("personId is required for this endpoint");
         }
-
-        // Chama o service para criar o empréstimo
-        LoanDTO created = service.create(bookId, personId, loanDate, returnDate);
+        Loan created = service.createLoan(personId, dto.getBookId(), dto.getDays());
         return ResponseEntity.ok(created);
     }
 
-    // Devolver um empréstimo
-    @PutMapping("/return/{id}")
-    public ResponseEntity<LoanDTO> returnLoan(@PathVariable Long id) {
-        return ResponseEntity.ok(service.returnLoan(id));
+    @PostMapping("/{id}/return")
+    public ResponseEntity<?> returnLoan(@PathVariable Long id) {
+        Loan l = service.returnLoan(id);
+        return ResponseEntity.ok(l);
     }
 
-    // Lista empréstimos de uma pessoa
     @GetMapping("/person/{personId}")
-    public ResponseEntity<List<LoanDTO>> byPerson(@PathVariable Long personId) {
+    public ResponseEntity<List<Loan>> byPerson(@PathVariable Long personId) {
         return ResponseEntity.ok(service.findByPerson(personId));
     }
 }

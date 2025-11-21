@@ -5,14 +5,8 @@ import com.example.demo.repository.PersonRepository;
 import com.example.demo.security.JwtUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.Valid;
-import java.util.Map;
-import java.util.Set;
+import org.springframework.web.bind.annotation.*;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -29,14 +23,14 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody Person payload) {
+    public ResponseEntity<?> register(@RequestBody Person payload) {
         if (repo.findByUsername(payload.getUsername()).isPresent()) {
             return ResponseEntity.badRequest().body(Map.of("error", "Username taken"));
         }
         payload.setPassword(passwordEncoder.encode(payload.getPassword()));
-        // default role
-        if (payload.getRoles() == null || payload.getRoles().isEmpty()) payload.setRoles(Set.of("ROLE_USER"));
+        if (payload.getRoles() == null || payload.getRoles().isEmpty()) payload.setRoles(Set.of("ROLE_ALUNO"));
         Person saved = repo.save(payload);
+        saved.setPassword(null);
         return ResponseEntity.ok(saved);
     }
 
@@ -50,6 +44,6 @@ public class AuthController {
             return ResponseEntity.status(401).body(Map.of("error","Invalid credentials"));
         }
         String token = jwtUtil.generateToken(p.getUsername(), p.getRoles().stream().toList());
-        return ResponseEntity.ok(Map.of("token", token));
+        return ResponseEntity.ok(Map.of("token", token, "roles", p.getRoles(), "username", p.getUsername(), "id", p.getId()));
     }
 }
