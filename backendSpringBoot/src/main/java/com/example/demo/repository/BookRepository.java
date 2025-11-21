@@ -11,8 +11,7 @@ import javax.persistence.LockModeType;
 import java.util.Optional;
 
 @Repository
-public interface BookRepository extends JpaRepository<Book, Long> {
-
+public interface BookRepository extends JpaRepository<Book,Long> {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select b from Book b where b.id = :id")
     Optional<Book> findByIdForUpdate(@Param("id") Long id);

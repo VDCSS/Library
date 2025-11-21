@@ -1,9 +1,8 @@
 package com.example.demo.model;
 
-import lombok.*;
-
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import lombok.*;
 
 @Entity
 @Getter
@@ -12,20 +11,15 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 public class Loan {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false)
-    private Person person;
+    @ManyToOne(optional=false) private Person person;
+    @ManyToOne(optional=false) private Book book;
 
-    @ManyToOne(optional = false)
-    private Book book;
-
-    private LocalDate startDate;
-    private LocalDate dueDate;
-    private LocalDate returnedDate;
+    private OffsetDateTime startTime;
+    private OffsetDateTime dueDate;
+    private OffsetDateTime returnedTime;
 
     @Enumerated(EnumType.STRING)
     private LoanStatus status = LoanStatus.ACTIVE;

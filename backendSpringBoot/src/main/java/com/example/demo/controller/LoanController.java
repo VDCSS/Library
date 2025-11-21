@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/loans")
-@CrossOrigin(origins = "*")
+
 public class LoanController {
 
     private final LoanService service;
