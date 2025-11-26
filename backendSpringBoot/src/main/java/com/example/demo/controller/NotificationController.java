@@ -4,7 +4,6 @@ import com.example.demo.model.Notification;
 import com.example.demo.repository.NotificationRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -13,14 +12,10 @@ public class NotificationController {
 
     private final NotificationRepository repo;
 
-    public NotificationController(NotificationRepository repo) {
-        this.repo = repo;
-    }
+    public NotificationController(NotificationRepository repo) { this.repo = repo; }
 
     @GetMapping
-    public ResponseEntity<List<Notification>> unread() {
-        return ResponseEntity.ok(repo.findByIsReadFalseOrderByCreatedAtDesc());
-    }
+    public ResponseEntity<List<Notification>> unread() { return ResponseEntity.ok(repo.findByIsReadFalseOrderByCreatedAtDesc()); }
 
     @PostMapping("/{id}/read")
     public ResponseEntity<?> markRead(@PathVariable Long id) {

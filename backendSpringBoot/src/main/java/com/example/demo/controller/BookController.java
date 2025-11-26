@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.Book;
-import com.example.demo.repository.BookRepository;
+import com.example.demo.service.BookService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -10,40 +10,28 @@ import java.util.List;
 @RequestMapping("/api/books")
 public class BookController {
 
-    private final BookRepository repo;
+    private final BookService svc;
 
-    public BookController(BookRepository repo) { this.repo = repo; }
+    public BookController(BookService svc) { this.svc = svc; }
 
     @GetMapping
-    public ResponseEntity<List<Book>> all() {
-        return ResponseEntity.ok(repo.findAll());
-    }
+    public ResponseEntity<List<Book>> all() { return ResponseEntity.ok(svc.all()); }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Book> get(@PathVariable Long id) {
-        return ResponseEntity.ok(repo.findById(id).orElseThrow(() -> new IllegalArgumentException("Book not found")));
-    }
+    public ResponseEntity<Book> get(@PathVariable Long id) { return ResponseEntity.ok(svc.get(id)); }
 
     @PostMapping
-    public ResponseEntity<Book> create(@RequestBody Book b) {
-        if (b.getAvailableQuantity() == null) b.setAvailableQuantity(b.getTotalQuantity());
-        return ResponseEntity.ok(repo.save(b));
-    }
+    public ResponseEntity<Book> create(@RequestBody Book b) { return ResponseEntity.ok(svc.save(b)); }
 
     @PutMapping("/{id}")
     public ResponseEntity<Book> update(@PathVariable Long id, @RequestBody Book payload) {
-        Book existing = repo.findById(id).orElseThrow(() -> new IllegalArgumentException("Book not found"));
-        existing.setTitle(payload.getTitle());
-        existing.setAuthor(payload.getAuthor());
-        existing.setIsbn(payload.getIsbn());
-        existing.setTotalQuantity(payload.getTotalQuantity());
+        Book existing = svc.get(id);
+        existing.setTitle(payload.getTitle()); existing.setAuthor(payload.getAuthor());
+        existing.setIsbn(payload.getIsbn()); existing.setTotalQuantity(payload.getTotalQuantity());
         existing.setAvailableQuantity(payload.getAvailableQuantity());
-        return ResponseEntity.ok(repo.save(existing));
+        return ResponseEntity.ok(svc.save(existing));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id) {
-        repo.deleteById(id);
-        return ResponseEntity.noContent().build();
-    }
+    public ResponseEntity<?> delete(@PathVariable Long id) { svc.delete(id); return ResponseEntity.noContent().build(); }
 }

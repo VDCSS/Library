@@ -3,8 +3,7 @@ package com.example.demo.repository;
 import com.example.demo.model.Book;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
-
-import javax.persistence.LockModeType;
+import jakarta.persistence.LockModeType;
 import java.util.Optional;
 
 @Repository

@@ -1,6 +1,4 @@
 -- V1__init_schema.sql
--- Create users (persons), books, loans, notifications, and roles collection table
-
 CREATE TABLE IF NOT EXISTS person (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
   username VARCHAR(100) NOT NULL UNIQUE,
@@ -27,6 +25,7 @@ CREATE TABLE IF NOT EXISTS book (
   total_quantity INT DEFAULT 1,
   available_quantity INT DEFAULT 1,
   times_borrowed INT DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   version BIGINT
 );
 

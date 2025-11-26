@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.AuthRequest;
+import com.example.demo.dto.AuthResponse;
 import com.example.demo.model.Person;
 import com.example.demo.repository.PersonRepository;
 import com.example.demo.security.JwtUtil;
@@ -25,25 +27,28 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Person payload) {
         if (repo.findByUsername(payload.getUsername()).isPresent()) {
-            return ResponseEntity.badRequest().body(Map.of("error", "Username taken"));
+            return ResponseEntity.badRequest().body(Map.of("error", "username_taken"));
         }
         payload.setPassword(passwordEncoder.encode(payload.getPassword()));
-        if (payload.getRoles() == null || payload.getRoles().isEmpty()) payload.setRoles(Set.of("ROLE_ALUNO"));
+        if (payload.getRoles() == null || payload.getRoles().isEmpty()) {
+            payload.setRoles(Set.of("ROLE_STUDENT"));
+        }
         Person saved = repo.save(payload);
         saved.setPassword(null);
         return ResponseEntity.ok(saved);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Map<String,String> body) {
-        String username = body.get("username");
-        String password = body.get("password");
-        Person p = repo.findByUsername(username).orElse(null);
-        if (p == null) return ResponseEntity.status(401).body(Map.of("error","Invalid credentials"));
-        if (!passwordEncoder.matches(password, p.getPassword())) {
-            return ResponseEntity.status(401).body(Map.of("error","Invalid credentials"));
+    public ResponseEntity<?> login(@RequestBody AuthRequest body) {
+        var opt = repo.findByUsername(body.getUsername());
+        if (opt.isEmpty()) return ResponseEntity.status(401).body(Map.of("error","invalid_credentials"));
+        Person p = opt.get();
+        if (!passwordEncoder.matches(body.getPassword(), p.getPassword())) {
+            return ResponseEntity.status(401).body(Map.of("error","invalid_credentials"));
         }
-        String token = jwtUtil.generateToken(p.getUsername(), p.getRoles().stream().toList());
-        return ResponseEntity.ok(Map.of("token", token, "roles", p.getRoles(), "username", p.getUsername(), "id", p.getId()));
+        var roles = p.getRoles();
+        String token = jwtUtil.generateToken(p.getUsername(), roles.stream().toList());
+        AuthResponse resp = AuthResponse.builder().token(token).roles(roles).id(p.getId()).username(p.getUsername()).build();
+        return ResponseEntity.ok(resp);
     }
 }
