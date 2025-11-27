@@ -1,4 +1,4 @@
-# Biblioteca Java Comunicação 2.0
+# Biblioteca
 
 Projeto em Java desenvolvido para demonstrar e facilitar rotinas de comunicação entre sistemas, incluindo troca de mensagens, integração via API e padronização de serviços.
 
