@@ -1,15 +1,6 @@
 package com.example.demo.repository;
 
 import com.example.demo.model.Book;
-import org.springframework.data.jpa.repository.*;
-import org.springframework.stereotype.Repository;
-import jakarta.persistence.LockModeType;
-import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@Repository
-public interface BookRepository extends JpaRepository<Book, Long> {
-
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("select b from Book b where b.id = :id")
-    Optional<Book> findByIdForUpdate(Long id);
-}
+public interface BookRepository extends JpaRepository<Book,Long> {}

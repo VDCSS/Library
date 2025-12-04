@@ -1,10 +1,9 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.PersonDTO;
+import com.example.demo.dto.UserDTO;
 import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.mapper.PersonMapper;
-import com.example.demo.model.Person;
-import com.example.demo.repository.PersonRepository;
+import com.example.demo.model.User;
+import com.example.demo.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,39 +13,39 @@ import java.util.stream.Collectors;
 @Service
 public class PersonService {
 
-    private final PersonRepository repo;
+    private final UserRepository repo;
     private final PersonMapper mapper;
 
-    public PersonService(PersonRepository repo, PersonMapper mapper) {
+    public PersonService(UserRepository repo, PersonMapper mapper) {
         this.repo = repo;
         this.mapper = mapper;
     }
 
-    public List<PersonDTO> findAll() {
+    public List<UserDTO> findAll() {
         return repo.findAll().stream().map(mapper::toDTO).collect(Collectors.toList());
     }
 
-    public PersonDTO findById(Long id) {
-        Person p = repo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Person not found: " + id));
+    public UserDTO findById(Long id) {
+        User p = repo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Person not found: " + id));
         return mapper.toDTO(p);
     }
 
     @Transactional
-    public PersonDTO create(PersonDTO dto) {
-        Person p = mapper.toEntity(dto);
-        Person saved = repo.save(p);
+    public UserDTO create(UserDTO dto) {
+        User p = mapper.toEntity(dto);
+        User saved = repo.save(p);
         return mapper.toDTO(saved);
     }
 
     @Transactional
-    public PersonDTO update(Long id, PersonDTO dto) {
-        Person existing = repo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Person not found: " + id));
+    public UserDTO update(Long id, UserDTO dto) {
+        User existing = repo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Person not found: " + id));
         existing.setName(dto.getName());
         existing.setCpf(dto.getCpf());
         existing.setEmail(dto.getEmail());
         existing.setUsername(dto.getUsername());
         existing.setPhone(dto.getPhone());
-        Person saved = repo.save(existing);
+        User saved = repo.save(existing);
         return mapper.toDTO(saved);
     }
 

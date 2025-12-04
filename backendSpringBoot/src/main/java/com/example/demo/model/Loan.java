@@ -5,34 +5,27 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "loan")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Table(name="loans")
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class Loan {
-
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "person_id")
-    private Person person;
+    @ManyToOne
+    private User user;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "book_id")
-    private Book book;
+    @ManyToOne
+    private Exemplar exemplar;
 
-    @Column(name = "loan_time")
-    private LocalDateTime loanTime;
+    private LocalDateTime loanDate;
+    private LocalDateTime expectedReturnDate;
+    private LocalDateTime realReturnDate;
 
-    @Column(name = "due_time")
-    private LocalDateTime dueTime;
+    // renewalsRemaining is the dynamic counter per loan (Aluno=3, Professor=4)
+    private Integer renewalsRemaining;
+    private Integer renewalsDone = 0;
 
-    @Column(name = "return_time")
-    private LocalDateTime returnTime;
-
-    @Column(name = "status")
-    private String status; // "ACTIVE" or "RETURNED"
+    private Boolean returned = false;
+    private Integer daysOverdueAtReturn;
+    private Long fineGeneratedId;
 }

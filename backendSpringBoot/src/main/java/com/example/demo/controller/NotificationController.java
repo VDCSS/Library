@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.Notification;
 import com.example.demo.repository.NotificationRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -32,3 +32,6 @@ CREATE TABLE IF NOT EXISTS loans (
   CONSTRAINT fk_loan_book FOREIGN KEY (book_id) REFERENCES books(id),
   CONSTRAINT fk_loan_person FOREIGN KEY (person_id) REFERENCES persons(id)
 );
+
+INSERT INTO users (id, name, email, password, role, blocked, outstanding_fines)
+VALUES (1, 'Admin', 'admin@local', '$2a$10$u1qk...REPLACE_WITH_BCRYPT', 'ADMIN', false, 0.0);

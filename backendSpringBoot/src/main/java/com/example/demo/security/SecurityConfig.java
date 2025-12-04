@@ -1,61 +1,45 @@
 package com.example.demo.security;
 
-import com.example.demo.security.JwtAuthenticationFilter;
-import com.example.demo.security.JwtUtil;
-import com.example.demo.service.impl.CustomUserDetailsService;
-import org.springframework.context.annotation.*;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import com.example.demo.service.CustomUserDetailsService;
 
 @Configuration
-@EnableMethodSecurity
 public class SecurityConfig {
 
-    private final JwtUtil jwtUtil;
-    private final CustomUserDetailsService userDetailsService;
+    private final JwtUtils jwtUtils;
+    private final CustomUserDetailsService uds;
 
-    public SecurityConfig(JwtUtil jwtUtil, CustomUserDetailsService userDetailsService) {
-        this.jwtUtil = jwtUtil;
-        this.userDetailsService = userDetailsService;
+    public SecurityConfig(JwtUtils jwtUtils, CustomUserDetailsService uds) {
+        this.jwtUtils = jwtUtils;
+        this.uds = uds;
+    }
+
+    @Bean
+    public JwtAuthFilter jwtAuthFilter() {
+        return new JwtAuthFilter(jwtUtils, uds);
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
-        JwtAuthenticationFilter jwtFilter = new JwtAuthenticationFilter(jwtUtil, userDetailsService);
-
-        http
-                .csrf(csrf -> csrf.disable()) // 🔥 novo formato
-                .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
+        http.csrf().disable()
+                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // Rotas públicas
-                        .requestMatchers("/api/auth/**", "/api/books/**",
-                                "/v3/api-docs/**", "/swagger-ui/**").permitAll()
-
-                        // Rotas para ADMIN
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
-
-                        // Rotas que exigem login
-                        .requestMatchers("/api/loans/**").authenticated()
-
-                        // Qualquer outra rota exige login
+                        .requestMatchers("/api/auth/**","/v3/api-docs/**","/swagger-ui/**").permitAll()
                         .anyRequest().authenticated()
-                )
-                // Filtro JWT antes do filtro padrão do Spring
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-
+                );
+        http.addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
     }
 }

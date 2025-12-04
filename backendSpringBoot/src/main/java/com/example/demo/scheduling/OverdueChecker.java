@@ -2,7 +2,6 @@ package com.example.demo.scheduling;
 
 import com.example.demo.events.LoanReturnedEvent;
 import com.example.demo.model.Loan;
-import com.example.demo.model.LoanStatus;
 import com.example.demo.repository.LoanRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

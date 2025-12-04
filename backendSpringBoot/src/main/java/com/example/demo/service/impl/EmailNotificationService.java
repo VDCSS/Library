@@ -13,16 +13,16 @@ public class EmailNotificationService implements NotificationService {
 
     @Override
     public void notifyLoanCreated(Loan loan) {
-        logger.info("notifyLoanCreated -> loanId={}, person={}, book={}", loan.getId(), loan.getPerson().getEmail(), loan.getBook().getTitle());
+        logger.info("notifyLoanCreated -> loanId={}, person={}, book={}", loan.getId(), loan.getUser().getEmail(), loan.getBook().getTitle());
     }
 
     @Override
     public void notifyLoanReturned(Loan loan) {
-        logger.info("notifyLoanReturned -> loanId={}, person={}, book={}", loan.getId(), loan.getPerson().getEmail(), loan.getBook().getTitle());
+        logger.info("notifyLoanReturned -> loanId={}, person={}, book={}", loan.getId(), loan.getUser().getEmail(), loan.getBook().getTitle());
     }
 
     @Override
     public void notifyLoanOverdue(Loan loan) {
-        logger.info("notifyLoanOverdue -> loanId={}, person={}, book={}", loan.getId(), loan.getPerson().getEmail(), loan.getBook().getTitle());
+        logger.info("notifyLoanOverdue -> loanId={}, person={}, book={}", loan.getId(), loan.getUser().getEmail(), loan.getBook().getTitle());
     }
 }

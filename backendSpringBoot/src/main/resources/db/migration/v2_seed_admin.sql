@@ -1,8 +1,3 @@
--- V2__seed_admin.sql
-INSERT INTO person (username, name, email, password, matricula)
-VALUES ('admin', 'Administrador', 'admin@library.local', '$2a$10$REPLACE_WITH_BCRYPT_HASH', NULL)
-ON DUPLICATE KEY UPDATE username = username;
-
-INSERT INTO person_roles (person_id, role)
-SELECT id, 'ROLE_ADMIN' FROM person WHERE username='admin'
-ON DUPLICATE KEY UPDATE person_id = person_id;
+-- V2: seed admin user (password must be bcrypt or you can register via /api/auth/register)
+INSERT INTO users (id, name, email, password, role, blocked, outstanding_fines)
+VALUES (1, 'root', 'admin@local', 'Pr0fessor', 'ADMIN', FALSE, 0.0);
