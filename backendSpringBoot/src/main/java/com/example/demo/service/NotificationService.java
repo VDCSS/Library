@@ -1,9 +1,11 @@
 package com.example.demo.service;
 
-import com.example.demo.model.Loan;
+import com.example.demo.model.User;
 
 public interface NotificationService {
-    void notifyLoanCreated(Loan loan);
-    void notifyLoanReturned(Loan loan);
-    void notifyLoanOverdue(Loan loan);
+    /**
+     * Envia (ou registra) uma notificação para o usuário.
+     * Implementações podem enviar email, push, gravar log, etc.
+     */
+    void notifyUser(User user, String subject, String body);
 }

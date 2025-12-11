@@ -12,7 +12,7 @@ public class User {
     private String name;
     @Column(unique = true, nullable = false)
     private String email;
-    private String password; // stored bcrypt
+    private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
     private Boolean blocked = false;

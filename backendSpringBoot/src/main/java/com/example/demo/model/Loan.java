@@ -21,7 +21,6 @@ public class Loan {
     private LocalDateTime expectedReturnDate;
     private LocalDateTime realReturnDate;
 
-    // renewalsRemaining is the dynamic counter per loan (Aluno=3, Professor=4)
     private Integer renewalsRemaining;
     private Integer renewalsDone = 0;
 

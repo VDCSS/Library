@@ -1,10 +1,9 @@
 package com.example.demo.controller;
-
-import com.example.demo.mapper.DtoMapper;
 import org.springframework.web.bind.annotation.*;
 import com.example.demo.service.LoanService;
 import com.example.demo.dto.*;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.mapper.DtoMapper;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -13,9 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class LoanController {
     private final LoanService loanService;
     private final UserRepository userRepo;
-    public LoanController(LoanService loanService, UserRepository userRepo){
-        this.loanService=loanService; this.userRepo=userRepo;
-    }
+    public LoanController(LoanService loanService, UserRepository userRepo){ this.loanService = loanService; this.userRepo = userRepo; }
 
     @PostMapping("/create")
     public LoanDto create(@RequestBody CreateLoanRequest req, @AuthenticationPrincipal UserDetails ud){

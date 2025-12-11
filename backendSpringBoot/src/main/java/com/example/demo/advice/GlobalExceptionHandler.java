@@ -4,7 +4,6 @@ import com.example.demo.exception.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
-
 import java.time.Instant;
 import java.util.Map;
 
@@ -12,24 +11,18 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<?> handleNotFound(NotFoundException ex, WebRequest req){
-        return build(HttpStatus.NOT_FOUND, "NOT_FOUND", ex.getMessage());
-    }
+    public ResponseEntity<?> handleNotFound(NotFoundException ex){ return build(HttpStatus.NOT_FOUND,"NOT_FOUND",ex.getMessage()); }
 
     @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<?> handleBadRequest(BadRequestException ex, WebRequest req){
-        return build(HttpStatus.BAD_REQUEST, "BAD_REQUEST", ex.getMessage());
-    }
+    public ResponseEntity<?> handleBadRequest(BadRequestException ex){ return build(HttpStatus.BAD_REQUEST,"BAD_REQUEST",ex.getMessage()); }
 
     @ExceptionHandler(ForbiddenException.class)
-    public ResponseEntity<?> handleForbidden(ForbiddenException ex, WebRequest req){
-        return build(HttpStatus.FORBIDDEN, "FORBIDDEN", ex.getMessage());
-    }
+    public ResponseEntity<?> handleForbidden(ForbiddenException ex){ return build(HttpStatus.FORBIDDEN,"FORBIDDEN",ex.getMessage()); }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<?> handleAll(Exception ex, WebRequest req){
-        ex.printStackTrace(); // dev - remove in prod
-        return build(HttpStatus.INTERNAL_SERVER_ERROR, "ERROR", "Erro interno");
+    public ResponseEntity<?> handleAll(Exception ex){
+        ex.printStackTrace();
+        return build(HttpStatus.INTERNAL_SERVER_ERROR,"ERROR","Internal server error");
     }
 
     private ResponseEntity<Map<String,Object>> build(HttpStatus status, String code, String message){

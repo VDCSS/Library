@@ -1,21 +1,16 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.BookDto;
 import com.example.demo.model.Book;
-import com.example.demo.repository.BookRepository;
-import org.springframework.stereotype.Service;
+import com.example.demo.model.Exemplar;
 import java.util.List;
 
-@Service
-public class BookService {
-    private final BookRepository repo;
-
-    public BookService(BookRepository repo) { this.repo = repo; }
-
-    public List<Book> all() { return repo.findAll(); }
-    public Book get(Long id) { return repo.findById(id).orElseThrow(); }
-    public Book save(Book b) {
-        if (b.getAvailableQuantity() == null) b.setAvailableQuantity(b.getTotalQuantity());
-        return repo.save(b);
-    }
-    public void delete(Long id) { repo.deleteById(id); }
+public interface BookService {
+    Book create(Book book);
+    Book update(Long id, Book book);
+    Book findById(Long id);
+    List<Book> findAll();
+    Exemplar addExemplar(Long bookId, Exemplar exemplar);
+    List<Exemplar> findExemplarsByBook(Long bookId);
+    BookDto toDto(Book book);
 }
